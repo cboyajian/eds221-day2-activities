@@ -70,6 +70,7 @@ ggplot(data = mc_trout, aes(x = length1, y = weight)) +
   scale_color_manual(values = c("darkblue", "darkred", "purple")) +
   facet_wrap(~reach) +
   labs(title = "Cutthroat Lenght vs. Weight",
+       caption = "Data sourced from https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-and.4027.14"
        x = "Length (mm)",
        y = "Weight (g)")
 
