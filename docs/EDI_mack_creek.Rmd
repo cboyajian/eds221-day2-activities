@@ -72,5 +72,7 @@ ggplot(data = mc_trout, aes(x = length1, y = weight)) +
   labs(title = "Cutthroat Lenght vs. Weight",
        x = "Length (mm)",
        y = "Weight (g)")
+
+ggsave(here::here("figs", "cutthroat_size.png"))
 ```
 
