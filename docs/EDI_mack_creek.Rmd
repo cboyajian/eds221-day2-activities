@@ -1,0 +1,76 @@
+---
+title: "EDI Mack Creek Data"
+author: "Clarissa Boyajian"
+date: "8/10/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(janitor)
+```
+
+## Read in the data
+
+```{r}
+mack_verts <- read_csv(here::here("data", "AS00601.csv"))
+```
+
+## Wrangling and Exploring
+
+```{r}
+mack_verts <- mack_verts %>% clean_names()
+```
+
+```{r}
+mc_wt_5 <- mack_verts[5, "weight"]
+
+mc_length_8_20 <- mack_verts[8:20, "length1"]
+
+mc_dates <- mack_verts[, "sampledate"]
+```
+
+## Make a salamander subset
+
+```{r}
+mc_salamanders <- mack_verts %>% 
+  filter(species == "DITE")
+```
+
+## Make a scatter plot
+
+```{r}
+ggplot (data = mc_salamanders, aes(x = length1, y = weight)) +
+  geom_point(size = 0.25, 
+             aes(color = length1),
+             show.legend = FALSE) +
+  theme_light() +
+  scale_color_gradient(low ="blue", high = "yellow") +
+  labs(title = "Salamander Length vs. Weight",
+       subtitle = "Aquatic Vertebrate Population Study in Mack Creek",
+       caption = "Data sourced from https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-and.4027.14",
+       x = "Length (mm)",
+       y = "Weight (g)")
+
+ggsave(here::here("figs", "salamander_size.png"))
+```
+
+## Make a cutthroat plot
+
+```{r}
+mc_trout <- mack_verts %>% 
+  filter(species == "ONCL")
+
+ggplot(data = mc_trout, aes(x = length1, y = weight)) +
+  geom_point(aes(color = reach),
+             size = 0.5,
+             show.legend = FALSE) +
+  scale_color_manual(values = c("darkblue", "darkred", "purple")) +
+  facet_wrap(~reach) +
+  labs(title = "Cutthroat Lenght vs. Weight",
+       x = "Length (mm)",
+       y = "Weight (g)")
+```
+
